@@ -74,6 +74,15 @@ This is a **Django-based blogging platform** that supports user authentication, 
 
 ---
 
+ ## 👤 Basic Credentials
+| **Username** | **Password** | **Role**      |
+|--------------|--------------|---------------|
+| admin        | admin        | admin         |
+| mod          | mod          | moderator     |
+| user         | user         | user          |
+
+
+---
 ## ⚙️ Key Functions
 
 ### 1. **Login & Register**
