@@ -3,6 +3,7 @@ from api_app.forms import Login_form, Register_form, Create_Blog, Edit_Blog, Adm
 from django.http import JsonResponse
 from api_app.models import App_User, Blogs
 import jwt
+import bcrypt
 from jwt.exceptions import ExpiredSignatureError
 from datetime import date
 from time import time
@@ -18,9 +19,14 @@ def Validator(func):
             request.decoded = decoded
             return func(request, *args, **kwargs)
         except ExpiredSignatureError:
-            return JsonResponse({"Error":"Signature Expired ! Please Login again"})
+            return render(request, "Error_page.html", {
+                "error": {
+                    "code": "401",
+                    "message": "JWT signature expired. Please login again."
+                }
+            })
     return wrapper
-        
+
 
 def login(request):
     form = Login_form()
@@ -31,21 +37,34 @@ def login(request):
             passw = form.cleaned_data['password']
             try:
                 data = App_User.objects.get(username=user)
-                if data.password == passw:
+                password = bytes(passw, encoding="utf-8")
+                hashed = bytes(data.password[2:-1], encoding="utf-8")
+                res = bcrypt.checkpw(password, hashed)
+                if res:
                     user_data = {"role": data.role,
                                  "username": data.username,
                                  "exp": time() + (EXPIRY_MINUTES * 60)}
-                    print(user_data)
-                    access_token = jwt.encode(user_data, key=SECRET_KEY, algorithm=ALGORITHM)
+                    access_token = jwt.encode(
+                        user_data, key=SECRET_KEY, algorithm=ALGORITHM)
 
                     response = redirect("home")
                     response.set_cookie(
                         "AccessToken", access_token)
                     return response
                 else:
-                    return HttpResponse("Invalid password!")
+                    return render(request, "Error_page.html", {
+                "error": {
+                    "code": "401",
+                    "message": "Invalid Password !"
+                }
+            })
             except App_User.DoesNotExist:
-                return HttpResponse("No Such User Found !!")
+                return render(request, "Error_page.html", {
+                "error": {
+                    "code": "404",
+                    "message": "User Not Found "
+                }
+            })
     return render(request, "login.html", {"form": form})
 
 
@@ -58,12 +77,15 @@ def register(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
+            byte = password.encode("utf-8")
+            salt = bcrypt.gensalt()
+            hashed_pass = bcrypt.hashpw(byte, salt)
             try:
                 App_User.objects.get(username=username)
                 code = 401
             except:
                 App_User.objects.create(
-                    username=username, password=password)
+                    username=username, password=hashed_pass)
                 code = 201
     return render(request, "register.html", {"form": form, "code": code})
 
@@ -95,6 +117,7 @@ def logout(request):
     response.delete_cookie('AccessToken')
     response.delete_cookie('section')
     return response
+
 
 @Validator
 def my_blogs(request):
@@ -130,7 +153,13 @@ def mod_blogs(request):
             data_value = True
         return render(request, "Mod_blog.html", {"data": formatted_data, "data_value": data_value})
     else:
-        return JsonResponse({"Message": "Dont Have Access to this Page"})
+        return render(request, "Error_page.html", {
+                "error": {
+                    "code": "403",
+                    "message": "Dont Have Access to this Page !"
+                }
+            })
+
 
 @Validator
 def create_blog(request):
@@ -145,9 +174,9 @@ def create_blog(request):
             username = decoded['username']
             Blogs.objects.create(
                 blog_date=f_date, blog_title=title, blog_content=content, user=username)
-            print("Created Successfull !!!")
             return redirect("my_blogs")
     return render(request, "Create_blog.html", {"form": form})
+
 
 @Validator
 def delete_blog(request, id):
@@ -158,12 +187,24 @@ def delete_blog(request, id):
             blog.delete()
             return redirect("home")
         except:
-            return JsonResponse({"Message": "Blog does not Exist"})
+            return render(request, "Error_page.html", {
+                "error": {
+                    "code": "404",
+                    "message": "Blog Doesnot Exist !"
+                }
+            })
     else:
-        return JsonResponse({"Message":"Cant Delete the Blog !"})
+        return render(request, "Error_page.html", {
+                "error": {
+                    "code": "403",
+                    "message": "Can't Delete the Blog !"
+                }
+            })
+
+
 @Validator
 def only_admin(request):
-    decoded : dict = request.decoded
+    decoded: dict = request.decoded
     section = request.COOKIES.get("section")
     data = App_User.objects.all()
     form = Admin_Page()
@@ -193,7 +234,13 @@ def only_admin(request):
             return render(request, "Admin_page.html", {"section": section, "data": new_data, "form": form, "data_value": data_value})
         return render(request, "Admin_page.html")
     else:
-        return JsonResponse({"Message": "Dont Have Access to this Page"})
+        return render(request, "Error_page.html", {
+                "error": {
+                    "code": "403",
+                    "message": "Don't Have Access to this Page !"
+                }
+            })
+
 
 @Validator
 def edit_blog(request, id):

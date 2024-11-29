@@ -3,12 +3,12 @@ from django import forms
 
 class Login_form(forms.Form):
     username = forms.CharField(max_length=100)
-    password = forms.CharField(max_length=100)
+    password = forms.CharField(widget=forms.PasswordInput())
 
 
 class Register_form(forms.Form):
     username = forms.CharField(max_length=100)
-    password = forms.CharField(max_length=100)
+    password = forms.CharField(widget=forms.PasswordInput())
 
 
 class Create_Blog(forms.Form):

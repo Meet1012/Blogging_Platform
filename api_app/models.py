@@ -6,7 +6,7 @@ from django.db import models
 class App_User(models.Model):
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
+    password = models.CharField(max_length=200)
     role = models.CharField(max_length=100, default="user")
 
     def __hash__(self) -> int:

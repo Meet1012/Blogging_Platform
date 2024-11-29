@@ -8,10 +8,14 @@
       href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    />
     <style>
       /* General Styles */
       body {
-        font-family: 'Roboto Slab', serif;
+        font-family: "Roboto Slab", serif;
         background: linear-gradient(135deg, #4caf50, #81c784);
         margin: 0;
         padding: 0;
@@ -104,7 +108,7 @@
       h4.red {
         color: #e53935;
       }
-      a{
+      a {
         text-decoration: none;
         color: rgb(2, 145, 2);
       }
@@ -121,7 +125,7 @@
     <form method="POST">
       {% csrf_token %}
       <h1>Register</h1>
-      
+
       <div class="form-group">
         <label for="username">Username:</label>
         {{ form.username }}
@@ -129,17 +133,47 @@
 
       <div class="form-group">
         <label for="password">Password:</label>
-        {{ form.password }}
+        <div style="position: relative">
+          {{ form.password }}
+          <i
+            style="
+              position: absolute;
+              right: -5%;
+              top: 30%;
+              background-color: white;
+              padding: 0px 10px;
+            "
+            onclick="togglePassword()"
+            class="fas fa-eye"
+          ></i>
+        </div>
       </div>
 
       <button type="submit">Register</button>
-      
+
       {% if code == 201 %}
       <h4 class="green">Successfully Created!</h4>
-      Now <a href="{% url 'login' %}">Login</a> using the credentials
+      <span>Now <a href="{% url 'login' %}">Login</a> using the credentials </span>
       {% elif code == 401 %}
       <h4 class="red">Already Exists!</h4>
       {% endif %}
     </form>
+    <script>
+      function togglePassword() {
+        const passwordField = document.querySelector('input[name="password"]');
+        const toggleButton = document.querySelector("i");
+        const type = passwordField.getAttribute("type");
+
+        if (type === "password") {
+          passwordField.setAttribute("type", "text");
+          toggleButton.classList.remove("fa-eye");
+          toggleButton.classList.add("fa-eye-slash");
+        } else {
+          passwordField.setAttribute("type", "password");
+          toggleButton.classList.remove("fa-eye-slash");
+          toggleButton.classList.add("fa-eye");
+        }
+      }
+    </script>
   </body>
 </html>
