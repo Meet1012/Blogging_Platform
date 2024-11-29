@@ -2,6 +2,7 @@
 
 [![Django](https://img.shields.io/badge/Django-4.0%2B-brightgreen)](https://www.djangoproject.com/)
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
+
 This is a **Django-based blogging platform** that supports user authentication, blog creation, and role-based access control (RBAC) for admins and moderators. It allows users to register, log in, create and manage their blogs, and also provides an admin dashboard for managing users and blog content.
 
 ---
