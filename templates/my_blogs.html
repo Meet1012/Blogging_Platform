@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Blogs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* General Styles */
+      body {
+        font-family: "Roboto Slab", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+
+      h1 {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        text-align: center;
+        color: #4caf50;
+        margin-top: 30px;
+        font-size: 2.5rem;
+      }
+
+      /* Blog Container */
+      .blog-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px auto;
+        max-width: 800px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .blog-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .blog-details:last-child {
+        border-bottom: none;
+      }
+
+      .blog-details a {
+        text-decoration: none;
+        color: #333;
+        font-size: 1.5rem;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 10px;
+        transition: color 0.3s, transform 0.3s;
+      }
+
+      .blog-details a:hover {
+        color: #388e3c;
+        transform: translateX(5px);
+      }
+
+      .blog-actions {
+        display: flex;
+        justify-content: end;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .blog-actions button {
+        padding: 8px 15px;
+        font-size: 14px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .edit-button {
+        background-color: #ff9800;
+        color: white;
+      }
+
+      .edit-button:hover {
+        background-color: #e68900;
+      }
+
+      .delete-button {
+        background-color: #f44336;
+        color: white;
+      }
+
+      .delete-button:hover {
+        background-color: #e53935;
+      }
+
+      .create-button {
+        background-color: #4caf50;
+        color: white;
+        margin-top: 20px;
+        padding: 12px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .create-button:hover {
+        background-color: #45a049;
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        margin-top: 40px;
+        font-size: 0.9rem;
+        color: #777;
+      }
+
+      .back-button {
+        display: inline-block; /* Ensures it behaves like a button */
+        padding: 15px 30px; /* Matches the padding of the other buttons */
+        font-size: 1.2rem; /* Consistent font size */
+        color: #fff; /* White text color for contrast */
+        background-color: #3f51b5; /* A distinct blue shade */
+        border: none; /* No borders */
+        border-radius: 5px; /* Rounded corners to match other buttons */
+        text-decoration: none; /* Remove underline */
+        cursor: pointer; /* Pointer cursor */
+        transition: all 0.3s ease; /* Smooth transitions for hover/active states */
+        text-align: center; /* Center-align text */
+        margin-bottom: 30px; /* Add space below the button */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+      }
+
+      .back-button:hover {
+        background-color: #303f9f; /* Slightly darker blue on hover */
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+      }
+
+      .back-button:active {
+        background-color: #283593; /* Even darker blue when clicked */
+        transform: scale(0.98); /* Pressed effect */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      <a href="{% url 'home' %}" class="button back-button">Back</a> My Blogs
+    </h1>
+
+    <div class="blog-container">
+      {% if data_value %} {% for i in data %}
+      <div class="blog-details">
+        <a href="{% url 'view_blog' i.blog_id %}">{{ i.blog_title }}</a>
+        <div class="blog-actions">
+          <a href="{% url 'edit_blog' i.blog_id %}">
+            <button class="edit-button">Edit</button>
+          </a>
+          <a href="{% url 'delete_blog' i.blog_id %}">
+            <button class="delete-button">Delete</button>
+          </a>
+        </div>
+      </div>
+      {% endfor %} {% else %}
+      <p>No Blogs .</p>
+      {% endif %}
+    </div>
+    <div style="text-align: center">
+      <a href="{% url 'create_blog' %}" class="create-button"
+        >Create New Blog</a
+      >
+    </div>
+
+    <footer>© 2024 My Blog Site</footer>
+  </body>
+</html>

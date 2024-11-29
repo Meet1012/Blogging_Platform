@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blogs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* General Styles */
+      body {
+        font-family: "Roboto Slab", serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+        color: #333;
+      }
+
+      h1 {
+        text-align: center;
+        color: #4caf50;
+        margin-top: 20px;
+        font-size: 2.5rem;
+      }
+
+      /* Blog Links Container */
+      .blog-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px auto;
+        max-width: 900px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Blog Details */
+      .blog-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 10px 0;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .blog-details:last-child {
+        border-bottom: none;
+      }
+
+      /* Links Styling */
+      .blog-details a {
+        text-decoration: none;
+        color: #000000;
+        font-size: 1.2rem;
+        font-weight: 700;
+        transition: color 0.3s, transform 0.3s;
+      }
+
+      .blog-details a:hover {
+        color: #388e3c;
+        transform: translateX(5px);
+      }
+
+      /* Date Styling */
+      .blog-date {
+        font-size: 0.9rem;
+        color: #666;
+      }
+
+      /* Auth Button Styling */
+      .auth-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 10px 15px;
+        font-size: 1rem;
+        font-weight: 600;
+        background-color: transparent;
+        border-radius: 5px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .auth-button:hover {
+        color: #fff;
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        margin-top: 40px;
+        font-size: 0.9rem;
+        color: #777;
+      }
+
+      /* Role Buttons Container */
+      .role-buttons-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      /* Individual Role Buttons */
+      .role-button {
+        padding: 12px 20px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+        width: 200px;
+        transition: all 0.3s ease;
+      }
+
+      .role-button.admin {
+        background-color: #444;
+        border: 2px solid #444;
+        color: white;
+      }
+
+      .role-button.admin:hover {
+        background-color: #333;
+      }
+
+      .role-button.moderator {
+        background-color: #ff8c00;
+        border: 2px solid #ff8c00;
+        color: white;
+      }
+
+      .role-button.moderator:hover {
+        background-color: #e07b00;
+      }
+
+      .role-button.my-blogs {
+        background-color: #21b200;
+        border: 2px solid #21b200;
+        color: white;
+      }
+
+      .role-button.my-blogs:hover {
+        background-color: #1a8e00;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Blogs</h1>
+
+    <!-- Blog Container -->
+    <div class="blog-container">
+      {% for i in data %}
+      <div class="blog-details">
+        <a href="{% url 'view_blog' i.blog_id %}">{{ i.blog_title }}</a>
+        <span class="blog-date">{{ i.blog_date }}</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Auth Buttons -->
+    {% if is_authenticated %}
+      <!-- Logout Button -->
+      <a
+        href="{% url 'logout' %}"
+        class="auth-button"
+        style="border: 2px solid #ff0000; color: red;"
+        onmouseover="this.style.backgroundColor='#ff0000'; this.style.color='white';"
+        onmouseout="this.style.backgroundColor='transparent'; this.style.color='red';"
+      >
+        Logout
+      </a>
+
+      <!-- Role-based Buttons Container -->
+      <div class="role-buttons-container">
+          <a
+            href="{% url 'admin' %}"
+            class="role-button admin"
+          >
+            Admin Dashboard
+          </a>
+
+          <a
+            href="{% url 'mod_blogs' %}"
+            class="role-button moderator"
+          >
+            Moderator Dashboard
+          </a>
+
+        <a
+          href="{% url 'my_blogs' %}"
+          class="role-button my-blogs"
+        >
+          My Blogs
+        </a>
+      </div>
+    {% else %}
+      <!-- Login Button -->
+      <a
+        href="{% url 'login' %}"
+        class="auth-button"
+        style="border: 2px solid #21b200; color: rgb(6, 164, 1);"
+        onmouseover="this.style.backgroundColor='#21b200'; this.style.color='white';"
+        onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgb(6, 164, 1)';"
+      >
+        Login
+      </a>
+    {% endif %}
+
+    <!-- Footer -->
+    <footer>© 2024 My Blog Site</footer>
+  </body>
+</html>

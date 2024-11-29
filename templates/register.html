@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* General Styles */
+      body {
+        font-family: 'Roboto Slab', serif;
+        background: linear-gradient(135deg, #4caf50, #81c784);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: #333;
+      }
+
+      /* Form Container */
+      form {
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        padding: 30px;
+        width: 350px;
+        text-align: center;
+      }
+
+      /* Header Styling */
+      h1 {
+        color: #4caf50;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+      }
+
+      /* Form Group Styling */
+      .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+      }
+
+      .form-group label {
+        display: block;
+        font-weight: bold;
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+        color: #555;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        border-color: #4caf50;
+        box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+        outline: none;
+      }
+
+      /* Button Styling */
+      button {
+        width: 100%;
+        padding: 12px;
+        background-color: #4caf50;
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+      }
+
+      button:hover {
+        background-color: #45a049;
+        transform: scale(1.02);
+      }
+
+      /* Feedback Messages */
+      h4 {
+        font-size: 1rem;
+        margin-top: 20px;
+        font-weight: bold;
+      }
+
+      h4.green {
+        color: #4caf50;
+      }
+
+      h4.red {
+        color: #e53935;
+      }
+      a{
+        text-decoration: none;
+        color: rgb(2, 145, 2);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 400px) {
+        form {
+          width: 90%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <form method="POST">
+      {% csrf_token %}
+      <h1>Register</h1>
+      
+      <div class="form-group">
+        <label for="username">Username:</label>
+        {{ form.username }}
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password:</label>
+        {{ form.password }}
+      </div>
+
+      <button type="submit">Register</button>
+      
+      {% if code == 201 %}
+      <h4 class="green">Successfully Created!</h4>
+      Now <a href="{% url 'login' %}">Login</a> using the credentials
+      {% elif code == 401 %}
+      <h4 class="red">Already Exists!</h4>
+      {% endif %}
+    </form>
+  </body>
+</html>
