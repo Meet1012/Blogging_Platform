@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-1)_1gpl_t=*tu3we-vu^&0$&c9i=dvn5vm*92o_ez4c+j#(#dm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["blogging-platform-hna2.onrender.com"]
 
 
 # Application definition
